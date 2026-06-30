@@ -1,8 +1,6 @@
-name: Build Dkakin APK
+name: Build Dkakin APK (Clean Rebuild)
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -12,29 +10,36 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Flutter 3.27.2
+      - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.27.2'
           channel: 'stable'
 
-      # تنظيف عميق لكل ما يخص Gradle (حتى العام)
-      - name: Deep clean everything
+      # إنشاء مشروع Flutter جديد تمامًا (بدون أي v1)
+      - name: Create fresh Flutter project
+        run: flutter create --org com.dkakin dkakin_fresh
+
+      # نسخ كودنا إلى المشروع الجديد
+      - name: Copy our code
+        run: |
+          cp -r lib/ dkakin_fresh/lib/
+          cp pubspec.yaml dkakin_fresh/pubspec.yaml
+          # نسخ أي ملفات أندرويد مخصصة إذا أردت الاحتفاظ بها
+          cp -r android/app/src/main/AndroidManifest.xml dkakin_fresh/android/app/src/main/AndroidManifest.xml 2>/dev/null || true
+          cp -r android/app/src/main/kotlin/ dkakin_fresh/android/app/src/main/kotlin/ 2>/dev/null || true
+          # نسخ assets إن وجدت
+          cp -r assets/ dkakin_fresh/assets/ 2>/dev/null || true
+
+      - name: Build APK
+        working-directory: dkakin_fresh
         run: |
           flutter clean
-          rm -rf android/.gradle android/app/build
-          rm -rf ~/.gradle
-          rm -rf ~/.m2/repository
-          rm -rf $PUB_CACHE
-
-      - name: Get packages
-        run: flutter pub get
-
-      - name: Build APK release
-        run: flutter build apk --release
+          flutter pub get
+          flutter build apk --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: dkakin_fresh/build/app/outputs/flutter-apk/app-release.apk
