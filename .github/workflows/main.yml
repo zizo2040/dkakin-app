@@ -18,21 +18,10 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
-      - name: Force Android embedding v2
-        run: |
-          # إضافة السطر الذي يؤكد v2 في build.gradle إن لم يكن موجوداً
-          cd android/app
-          if ! grep -q "embeddingVersion" build.gradle; then
-            sed -i '/android {/a \    flutter { embeddingVersion = 2 }' build.gradle
-          fi
-
-      - name: Deep clean
+      - name: Clean and get packages
         run: |
           flutter clean
-          rm -rf android/.gradle android/app/build
-
-      - name: Get packages
-        run: flutter pub get
+          flutter pub get
 
       - name: Build APK
         run: flutter build apk --release
