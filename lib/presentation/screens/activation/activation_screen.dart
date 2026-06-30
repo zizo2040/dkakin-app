@@ -1,6 +1,5 @@
 // lib/presentation/screens/activation/activation_screen.dart
 // شاشة تفعيل الكود — تظهر كـ Dialog عند تجاوز الحدود أو كصفحة من الإعدادات
-enum LimitType { customers, products, suppliers, sales, messages }
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +12,19 @@ import '../../blocs/activation/activation_cubit.dart';
 import '../../blocs/activation/activation_state.dart';
 import '../../widgets/error_snackbar.dart';
 import '../../widgets/loading_widget.dart';
+enum LimitType { customers, products, suppliers, sales, messages }
 
+extension LimitTypeDisplay on LimitType {
+  String get displayName {
+    switch (this) {
+      case LimitType.customers: return 'العملاء';
+      case LimitType.products: return 'المنتجات';
+      case LimitType.suppliers: return 'الموردين';
+      case LimitType.sales: return 'المبيعات';
+      case LimitType.messages: return 'الرسائل';
+    }
+  }
+}
 class ActivationScreen extends StatefulWidget {
   final LimitType? limitType; // إذا مرّر، يعني أننا جئنا من حدّ مُتجاوز
 

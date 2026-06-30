@@ -23,7 +23,7 @@ void showErrorSnackBar(BuildContext context, String message) {
         ],
       ),
       backgroundColor: AppColors.debtRed,
-      duration: AppDimensions.snackBarDuration,
+      duration: Duration(seconds: AppDimensions.snackBarDuration),
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppDimensions.radiusM),
@@ -51,8 +51,7 @@ void showSuccessSnackBar(BuildContext context, String message) {
         ],
       ),
       backgroundColor: AppColors.successGreen,
-      duration: AppDimensions.snackBarDuration,
-      behavior: SnackBarBehavior.floating,
+duration: Duration(seconds: AppDimensions.snackBarDuration),      behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppDimensions.radiusM),
       ),

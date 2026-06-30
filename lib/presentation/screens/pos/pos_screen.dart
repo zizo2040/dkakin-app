@@ -6,6 +6,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/helpers.dart';
+import '../../../data/models/product.dart';  // استيراد نموذج Product
 import '../../../data/repositories/customer_repository.dart';
 import '../../blocs/pos/pos_bloc.dart';
 import '../../blocs/pos/pos_event.dart';
@@ -122,8 +123,6 @@ class _PosScreenState extends State<PosScreen> {
                             hintStyle: const TextStyle(fontSize: AppDimensions.fontBody),
                             prefixIcon: const Icon(Icons.search),
                             suffixIcon: IconButton(
-                              // TODO: فتح الكاميرا — يتطلب صلاحية CAMERA في AndroidManifest.xml
-                              // <uses-permission android:name="android.permission.CAMERA" />
                               onPressed: () {
                                 showErrorSnackBar(context, AppStrings.cameraNotAvailable);
                               },
@@ -221,7 +220,6 @@ class _PosScreenState extends State<PosScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // عنوان السلة
                       if (state.cart.isNotEmpty)
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -249,8 +247,6 @@ class _PosScreenState extends State<PosScreen> {
                             ],
                           ),
                         ),
-
-                      // بنود السلة
                       if (state.cart.isEmpty)
                         const Padding(
                           padding: EdgeInsets.all(AppDimensions.paddingL),
@@ -296,8 +292,6 @@ class _PosScreenState extends State<PosScreen> {
                             },
                           ),
                         ),
-
-                      // المجموع
                       Padding(
                         padding: const EdgeInsets.all(AppDimensions.paddingM),
                         child: Row(
@@ -314,8 +308,6 @@ class _PosScreenState extends State<PosScreen> {
                           ],
                         ),
                       ),
-
-                      // أزرار الدفع
                       Padding(
                         padding: const EdgeInsets.all(AppDimensions.paddingM),
                         child: Row(
@@ -373,15 +365,17 @@ class _PosScreenState extends State<PosScreen> {
     );
   }
 
-void _addToCart(BuildContext context, product) {
-  context.read<PosBloc>().add(PosAddToCart(
-    productId: product.id,               // أو product['id'] إذا كانت Map
-    productName: product['name'] as String,
-    unitPrice: product.sellPrice,        // أو (product['sell_price'] as num).toDouble()
-    quantity: 1,
-    availableStock: product.quantity,    // أو (product['quantity'] as int)
-  ));
-}
+  /// إضافة منتج إلى السلة. يستقبل كائن Product مباشرة.
+  void _addToCart(BuildContext context, Product product) {
+    context.read<PosBloc>().add(PosAddToCart(
+      productId: product.id.toString(),   // تحويل int إلى String لأن productId في الحدث نصي
+      productName: product.name,
+      unitPrice: product.sellPrice,
+      quantity: 1,
+      availableStock: product.quantity,
+    ));
+  }
+
   void _showSendStatementDialog(BuildContext context, PosSaleSuccess state) {
     showDialog(
       context: context,
@@ -396,7 +390,6 @@ void _addToCart(BuildContext context, product) {
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
-              // TODO: إرسال كشف عبر واتساب
               showSuccessSnackBar(context, 'تم فتح واتساب');
             },
             child: const Text(AppStrings.viaWhatsapp),
@@ -410,7 +403,7 @@ void _addToCart(BuildContext context, product) {
 // ===== الودجات الفرعية =====
 
 class _ProductListTile extends StatelessWidget {
-  final product;
+  final Product product;
   final VoidCallback onTap;
 
   const _ProductListTile({required this.product, required this.onTap});
@@ -438,7 +431,7 @@ class _ProductListTile extends StatelessWidget {
 }
 
 class _ProductGridItem extends StatelessWidget {
-  final product;
+  final Product product;
   final VoidCallback onTap;
 
   const _ProductGridItem({required this.product, required this.onTap});
@@ -482,7 +475,7 @@ class _ProductGridItem extends StatelessWidget {
 }
 
 class _CartItemCard extends StatelessWidget {
-  final item;
+  final dynamic item;
   final VoidCallback onIncrease;
   final VoidCallback onDecrease;
   final VoidCallback onRemove;
@@ -496,6 +489,10 @@ class _CartItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productName = item.productName as String;
+    final totalPrice = item.totalPrice as double;
+    final quantity = item.quantity as int;
+
     return Container(
       width: 160,
       margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -516,7 +513,7 @@ class _CartItemCard extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  item.productName,
+                  productName,
                   textAlign: TextAlign.right,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -527,7 +524,7 @@ class _CartItemCard extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            formatCurrency(item.totalPrice),
+            formatCurrency(totalPrice),
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: AppDimensions.fontBody,
@@ -547,7 +544,7 @@ class _CartItemCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
-                  '${item.quantity}',
+                  '$quantity',
                   style: const TextStyle(
                     fontSize: AppDimensions.fontSubtitle,
                     fontWeight: FontWeight.bold,
@@ -600,7 +597,6 @@ class _CustomerSelectionSheetState extends State<_CustomerSelectionSheet> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // المقبض
         Container(
           margin: const EdgeInsets.only(top: AppDimensions.paddingM),
           width: 40,
@@ -633,7 +629,6 @@ class _CustomerSelectionSheetState extends State<_CustomerSelectionSheet> {
           ),
         ),
         const Divider(),
-        // قائمة الزبائن الأخيرة
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
           child: Align(
@@ -679,7 +674,6 @@ class _CustomerSelectionSheetState extends State<_CustomerSelectionSheet> {
             },
           ),
         ),
-        // ملاحظة
         Padding(
           padding: const EdgeInsets.all(AppDimensions.paddingM),
           child: TextField(
@@ -695,7 +689,7 @@ class _CustomerSelectionSheetState extends State<_CustomerSelectionSheet> {
               fillColor: AppColors.white,
             ),
           ),
-        ),n        // أزرار
+        ),
         Padding(
           padding: const EdgeInsets.all(AppDimensions.paddingM),
           child: Row(

@@ -1,9 +1,8 @@
 // lib/presentation/blocs/customers/customers_state.dart
-enum SortType { name, debt, date }
 import 'package:equatable/equatable.dart';
 import '../../../data/models/customer.dart';
 import '../../../data/models/debt_transaction.dart';
-
+import 'package:dkakin/presentation/blocs/customers/customers_event.dart';
 abstract class CustomersState extends Equatable {
   const CustomersState();
   @override
