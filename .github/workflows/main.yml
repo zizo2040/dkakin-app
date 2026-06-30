@@ -18,16 +18,20 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
-      # ★ تنظيف عميق لإزالة أي بقايا v1 Embedding
-      - name: Deep clean Android artifacts
+      - name: Force Android embedding v2
+        run: |
+          # إضافة السطر الذي يؤكد v2 في build.gradle إن لم يكن موجوداً
+          cd android/app
+          if ! grep -q "embeddingVersion" build.gradle; then
+            sed -i '/android {/a \    flutter { embeddingVersion = 2 }' build.gradle
+          fi
+
+      - name: Deep clean
         run: |
           flutter clean
-          rm -rf android/.gradle
-          rm -rf android/app/build
-          rm -rf android/local.properties
-          rm -rf ~/.gradle/caches/
+          rm -rf android/.gradle android/app/build
 
-      - name: Get Flutter packages
+      - name: Get packages
         run: flutter pub get
 
       - name: Build APK
