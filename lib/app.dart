@@ -1,5 +1,6 @@
 // lib/app.dart
 // جذر التطبيق — تغليف MaterialApp بالـ BlocProviders
+import 'package:dkakin/core/constants/app_dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -84,7 +85,7 @@ class DkakinApp extends StatelessWidget {
                 ),
               ),
             ),
-            cardTheme: CardTheme(
+            cardTheme: CardThemeData( // صحيح
               elevation: 2,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),

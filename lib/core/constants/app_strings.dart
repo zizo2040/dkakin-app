@@ -131,7 +131,6 @@ abstract class AppStrings {
   static const String newDebts = 'ديون جديدة';
   static const String collectedPayments = 'سداد محصل';
   static const String last7Days = 'آخر 7 أيام';
-  static const String topProducts = 'أكثر 5 منتجات مبيعاً';
   static const String noDataYet = 'لسه مفيش بيانات كفاية — رجع بعد ما تسجل مبيعات';
   static const String profitFormulaNote = '// صافي الربح = (مبيعات كاش + مسددات) - تكلفة البضاعة المباعة';
 

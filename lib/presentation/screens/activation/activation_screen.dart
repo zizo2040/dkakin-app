@@ -1,5 +1,6 @@
 // lib/presentation/screens/activation/activation_screen.dart
 // شاشة تفعيل الكود — تظهر كـ Dialog عند تجاوز الحدود أو كصفحة من الإعدادات
+enum LimitType { customers, products, suppliers, sales, messages }
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

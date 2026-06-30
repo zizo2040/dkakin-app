@@ -373,16 +373,15 @@ class _PosScreenState extends State<PosScreen> {
     );
   }
 
-  void _addToCart(BuildContext context, product) {
-    context.read<PosBloc>().add(PosAddToCart(
-      productId: product.id,
-      productName: product.name,
-      unitPrice: product.sellPrice,
-      quantity: 1,
-      availableStock: product.quantity,
-    ));
-  }
-
+void _addToCart(BuildContext context, product) {
+  context.read<PosBloc>().add(PosAddToCart(
+    productId: product.id,               // أو product['id'] إذا كانت Map
+    productName: product['name'] as String,
+    unitPrice: product.sellPrice,        // أو (product['sell_price'] as num).toDouble()
+    quantity: 1,
+    availableStock: product.quantity,    // أو (product['quantity'] as int)
+  ));
+}
   void _showSendStatementDialog(BuildContext context, PosSaleSuccess state) {
     showDialog(
       context: context,

@@ -1,4 +1,5 @@
 // lib/presentation/blocs/customers/customers_state.dart
+enum SortType { name, debt, date }
 import 'package:equatable/equatable.dart';
 import '../../../data/models/customer.dart';
 import '../../../data/models/debt_transaction.dart';
