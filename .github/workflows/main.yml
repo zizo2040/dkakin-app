@@ -12,18 +12,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Flutter
+      - name: Install Flutter 3.27.2
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          flutter-version: '3.27.2'
           channel: 'stable'
 
-      - name: Clean and get packages
+      # تنظيف عميق لكل ما يخص Gradle (حتى العام)
+      - name: Deep clean everything
         run: |
           flutter clean
-          flutter pub get
+          rm -rf android/.gradle android/app/build
+          rm -rf ~/.gradle
+          rm -rf ~/.m2/repository
+          rm -rf $PUB_CACHE
 
-      - name: Build APK
+      - name: Get packages
+        run: flutter pub get
+
+      - name: Build APK release
         run: flutter build apk --release
 
       - name: Upload APK
