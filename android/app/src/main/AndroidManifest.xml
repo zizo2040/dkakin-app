@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  AndroidManifest.xml — ملف تكوين Android
+  TODO: قبل الإصدار النهائي:
+    1. أضف صلاحية INTERNET عند ربط Firebase
+    2. فعّل ProGuard (minifyEnabled true) في android/app/build.gradle
+    3. استخدم التوقيع الإنتاجي (Release keystore) — لا debug
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dkakin.app">
+
+    <!-- صلاحيات -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- صلاحية الكاميرا لماسح الباركود (mobile_scanner) -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- صلاحيات البلوتوث للطابعة (esc_pos_bluetooth) -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+    <!-- تخزين -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <application
+        android:label="دكاكين"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
+        
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            
+            <meta-data
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme"/>
+            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2"/>
+    </application>
+</manifest>
