@@ -3,7 +3,7 @@ name: Build Dkakin APK
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:  # يسمح بالتشغيل اليدوي
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.24.0'   # إصدار محدد ومضمون
           channel: 'stable'
 
       - name: Clean and get packages
