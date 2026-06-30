@@ -15,13 +15,20 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'   # إصدار محدد ومضمون
+          flutter-version: '3.24.0'
           channel: 'stable'
 
-      - name: Clean and get packages
+      # ★ تنظيف عميق لإزالة أي بقايا v1 Embedding
+      - name: Deep clean Android artifacts
         run: |
           flutter clean
-          flutter pub get
+          rm -rf android/.gradle
+          rm -rf android/app/build
+          rm -rf android/local.properties
+          rm -rf ~/.gradle/caches/
+
+      - name: Get Flutter packages
+        run: flutter pub get
 
       - name: Build APK
         run: flutter build apk --release
